@@ -35,7 +35,19 @@ namespace TinyContainer
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            foreach (var (dependency, lifetimeManager) in objectsToRelease)
+            {
+                lifetimeManager.Release(dependency);
+            }
+
+            objectsToRelease.Clear();
+
+            foreach (var (_, lifetimeManager) in registrations)
+            {
+                lifetimeManager.Dispose();
+            }
+
+            registrations.Clear();
         }
     }
 }
